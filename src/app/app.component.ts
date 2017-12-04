@@ -5,6 +5,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
+import { HelloPage } from '../pages/hello/hello';
 
 @Component({
   templateUrl: 'app.html'
@@ -16,23 +17,34 @@ export class MyApp {
 
   pages: Array<{title: string, component: any}>;
 
+  browser: boolean;
+
   constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'Home', component: HomePage },
-      { title: 'List', component: ListPage }
+      { title: 'List', component: ListPage },
+      { title: 'Hello', component: HelloPage }
     ];
 
   }
 
   initializeApp() {
-    this.platform.ready().then(() => {
+    this.platform.ready().then((source) => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
-      this.statusBar.styleDefault();
-      this.splashScreen.hide();
+      if(this.platform.is("core")){
+        console.log("laufe im Browser!");
+        this.browser = true;
+      }
+      else{
+        this.browser = false;
+        this.statusBar.styleDefault();
+        this.splashScreen.hide();
+        console.log("laufe auf einem Handy!");
+      }
     });
   }
 
